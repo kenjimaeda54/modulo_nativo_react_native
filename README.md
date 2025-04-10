@@ -152,7 +152,7 @@ RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(returnHello) {
 ```
 
 ##
-- Para usar módulo acima é bem simples mesmo caso de uso para Android como mencionado acima, pois eu exportei um módulo Assíncrono para usar await
+- Para usar módulo acima é bem simples mesmo caso de uso para Android, pois eu exportei um módulo Assíncrono para usar await
 
 ##
 

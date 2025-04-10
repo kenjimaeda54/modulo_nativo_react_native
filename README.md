@@ -1,79 +1,109 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Motivação
+Uso de módulos nativos no React Native
 
-# Getting Started
+# Features
+- getName será o nome do módulo que precisa procurar no React Native, não precisa ser necessariamente o mesmo nome da classe que criamos, o módulo, é nem o nome do pacote.
+  
+```kotlin
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+// o getName sera o nome do modulo a procurar no react native
 
-## Step 1: Start the Metro Server
+package com.nativo.reactnativecommunication
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+import com.facebook.react.bridge.Promise
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
 
-To start Metro, run the following command from the _root_ of your React Native project:
+class HelloReactNative (reactContext: ReactApplicationContext):  ReactContextBaseJavaModule(reactContext) {
 
-```bash
-# using npm
-npm start
+        override fun getName() = "HelloReactNative"
 
-# OR using Yarn
-yarn start
+        @ReactMethod
+        fun returnHello(callback: Promise) {
+            try {
+                callback.resolve("Hello android nativo")
+            }catch (exception: Exception){
+                callback.reject("error",exception)
+
+            }
+
+        }
+
+
+}
+
+
+
+//=== aplicando
+
+ useEffect(()=>{
+      handleKotlinModule()
+    })
+
+    async function handleKotlinModule() {
+            try {
+                //nome HelloReactNative é o nome do getName
+                const resultado = await HelloReactNative.returnHello()
+                console.log(resultado)
+            } catch (error) {
+                console.log("error modulo")
+            }
+    };
 ```
 
-## Step 2: Start your Application
+##
+- Precisamos registrar nossos módulos em uma classe responsável por instanciar nossos pacotes.
+- Este HelloReactNativePackage que vai ser adicionado no MainApplication, facilitando assim o gerenciamento de novos módulos
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+```kotlin
+package com.nativo.reactnativecommunication
 
-### For Android
+import android.view.View
+import com.facebook.react.ReactPackage
+import com.facebook.react.bridge.NativeModule
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.uimanager.ReactShadowNode
+import com.facebook.react.uimanager.ViewManager
+import java.util.Collections
 
-```bash
-# using npm
-npm run android
+class HelloReactNativePackage: ReactPackage {
 
-# OR using Yarn
-yarn android
+    override fun createNativeModules(reactContext: ReactApplicationContext): MutableList<NativeModule> {
+        return mutableListOf(HelloReactNative(reactContext))
+    }
+
+    override fun createViewManagers(reactContext: ReactApplicationContext): MutableList<ViewManager<View, ReactShadowNode<*>>>  =
+        Collections.emptyList()
+
+}
+
+
 ```
 
-### For iOS
+#===
+- Foi criado no react native um  arquivo .d para lidar com as tipagens
 
-```bash
-# using npm
-npm run ios
 
-# OR using Yarn
-yarn ios
+```typescript
+import "react-native"
+
+interface HelloReactNativeType {
+    returnHello: () => Promise<string>
+}
+
+declare  module "react-native" {
+    interface  NativeModulesStatic {
+        HelloReactNative: HelloReactNativeType
+    }
+}
+
+
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+##
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+- Dica caso precise fazer um novo precisa limpar o projeto antes de iniciar com o comando ***npx react-native clean*** com as setas navega é com o espaço seleciona
 
-## Step 3: Modifying your App
 
-Now that you have successfully run the app, let's modify it.
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.

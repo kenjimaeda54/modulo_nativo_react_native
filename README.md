@@ -82,7 +82,8 @@ class HelloReactNativePackage: ReactPackage {
 
 ```
 
-#===
+## 
+
 - Foi criado no react native um  arquivo .d para lidar com as tipagens
 
 

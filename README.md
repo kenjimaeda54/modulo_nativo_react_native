@@ -108,7 +108,7 @@ declare  module "react-native" {
 - Primeiramente construímos nossas interfaces no módulo h depois implementamos no módulo m
 - Aqui o nome do módulo será o mesmo usado no projeto em React Native por este motivo deixei mesmo do Android, assim não preciso identificar qual plataforma. Ambos iram funcionar para Android é IOS
 
-```Swift
+```Objective-C
 
 
 #import <React/RCTBridgeModule.h>

@@ -2,6 +2,7 @@
 Uso de módulos nativos no React Native
 
 # Features
+### Android
 - getName será o nome do módulo que precisa procurar no React Native, não precisa ser necessariamente o mesmo nome da classe que criamos, o módulo, é nem o nome do pacote.
   
 ```kotlin
@@ -100,6 +101,57 @@ declare  module "react-native" {
 
 
 ```
+
+### IOS
+- Infelizmente, no IOS ainda usamos ObjectiveC
+- Primeiramente construímos nossas interfaces no módulo h depois implementamos no módulo m
+- Aqui o nome do módulo será o mesmo usado no projeto em React Native por este motivo deixei mesmo do Android, assim não preciso identificar qual plataforma. Ambos iram funcionar para Android é IOS
+
+```Swift
+
+
+#import <React/RCTBridgeModule.h>
+#import <Foundation/Foundation.h>
+
+
+@interface HelloReactNative : NSObject  <RCTBridgeModule>
+
+- (NSString *)returnHello;
+
+
+
+@end
+
+
+
+##implementação da internface
+
+//
+//  HelloReactNative.m
+//  nativo
+//
+//  Created by kenjimaeda on 10/04/25.
+//
+#import "HelloReactNative.h"
+
+@implementation HelloReactNative
+ 
+RCT_EXPORT_MODULE()
+
+RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(returnHello) {
+  NSString *hello = @"Hello modulo nativo ios";
+  return hello;
+}
+
+
+
+@end
+
+
+```
+
+##
+- Para usar módulo acima é bem simples mesmo caso de uso para Android como mencionado acima, pois eu exportei um módulo Assíncrono para usar await
 
 ##
 
